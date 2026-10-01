@@ -27,7 +27,7 @@ The network is segmented into four distinct VLANs (plus a blackhole VLAN) to ens
 
 
 https://github.com/user-attachments/assets/5a86f648-b328-4a40-bc3d-7b65aa5a7a83
-<br>
+
 
 ## Core Switch & L2 Security (GloriaCoffee_SW)
 
@@ -139,7 +139,6 @@ interface GigabitEthernet0/1.99
 <br>
 
 https://github.com/user-attachments/assets/925b0f85-d2b3-4fb4-9c66-0813b104ba5a
-<br>
 
 ### Network Address Translation (NAT)
 Port Address Translation (PAT / NAT Overload) is configured to map internal private IP addresses to a single public IP provided by the ISP. A standard ACL explicitly dictates which hosts are permitted to be translated:
@@ -192,7 +191,6 @@ The ISP router and internet server emulate external wide-area network (WAN) serv
 <br>
 
 https://github.com/user-attachments/assets/7fb63aeb-25fb-45a4-9f81-477cad7d6848
-<br>
 
 ### ⚠️ Packet Tracer Limitations (ISP & WAN Services)
 *   **Simplified Internet Architecture:** In production, enterprise internet connectivity involves public Autonomous System Numbers (ASNs), Border Gateway Protocol (BGP) peering, and Content Delivery Networks (CDNs). A single mock server and static default route are used here to represent the broader internet within Packet Tracer's simulation limits.
