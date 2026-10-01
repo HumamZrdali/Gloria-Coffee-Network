@@ -6,11 +6,11 @@
 
 This repository contains a Cisco Packet Tracer project demonstrating a highly secure, segmented, and scalable network topology for a commercial coffee shop (Gloria Coffee). The lab simulates an ISP, a simulated internet environment, a core router, and a core switch managing multiple isolated VLANs.
 
-## 🗺️ Network Topology
+## Network Topology
 
 ![Network Topology](images/Topology.png)
 
-## 🏢 VLAN Architecture & Business Logic
+## VLAN Architecture & Business Logic
 
 The network is segmented into four distinct VLANs (plus a blackhole VLAN) to ensure strict security, compliance, and traffic isolation across the business:
 
@@ -27,7 +27,7 @@ The network is segmented into four distinct VLANs (plus a blackhole VLAN) to ens
 https://github.com/user-attachments/assets/5a86f648-b328-4a40-bc3d-7b65aa5a7a83
 
 
-## 🖧 Core Switch & L2 Security (GloriaCoffee_SW)
+## Core Switch & L2 Security (GloriaCoffee_SW)
 
 The core switch acts as the primary enforcement point for internal network security, utilizing several Layer 2 hardening techniques to prevent unauthorized access, spoofing, and internal lateral movement.
 
@@ -75,7 +75,7 @@ interface FastEthernet0/10
 
 ---
 
-## 🚦 Edge Router & Inter-VLAN Routing (GloriaCoffee_R1)
+## Edge Router & Inter-VLAN Routing (GloriaCoffee_R1)
 
 The edge router serves as the gateway for all internal networks, handling inter-VLAN routing, dynamic IP allocation, NAT, and perimeter defense against external threats.
 
@@ -166,7 +166,7 @@ access-list 1 permit 192.168.30.0 0.0.0.255
 
 ---
 
-## 🌍 ISP & WAN Simulation
+## ISP & WAN Simulation
 
 The ISP router and internet server emulate external wide-area network (WAN) services, providing upstream routing, time synchronization, and basic web access for client verification.
 
@@ -189,7 +189,7 @@ https://github.com/user-attachments/assets/7fb63aeb-25fb-45a4-9f81-477cad7d6848
 
 ---
 
-## 🔐 Device Credentials
+## Device Credentials
 
 To explore the configurations directly via the CLI in Cisco Packet Tracer, use the following authentication details. 
 
@@ -205,7 +205,7 @@ To explore the configurations directly via the CLI in Cisco Packet Tracer, use t
 
 ---
 
-## 🚀 How to Run the Lab
+## How to Run the Lab
 
 1. **Prerequisites:** Ensure you have **Cisco Packet Tracer** (version 8.0 or newer recommended) installed.
 2. **Open the Simulation:** Clone this repository and launch the `.pkt` file located inside the `simulation/` directory.
