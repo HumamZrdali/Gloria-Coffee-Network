@@ -82,6 +82,28 @@ The edge router serves as the gateway for all internal networks, handling inter-
 *   **Router-on-a-Stick (ROAS):** Inter-VLAN routing is facilitated through a single physical Gigabit interface utilizing 802.1Q subinterfaces. This allows isolated broadcast domains to route traffic logically through a central chokepoint.
 *   **DHCP Services & Expandability:** The router acts as the centralized DHCP server for the Management, POS, and Guest networks. To accommodate future network expansion and ensure static infrastructure (such as servers, cameras, and printers) have predictable addresses, the first 20-22 IP addresses of each subnet are explicitly excluded from the DHCP pools.
 
+<details>
+  <summary>🔍 View Inter-VLAN Routing Config (GigabitEthernet0/1)</summary>
+
+  ```cisco
+  interface GigabitEthernet0/1.10
+   description MANAGEMENT_OFFICE_GATEWAY
+   encapsulation dot1Q 10
+   ip address 192.168.10.1 255.255.255.0
+   no ip proxy-arp
+   ip nat inside
+   ip access-group VLAN10_RESTRICTIONS in
+  
+  interface GigabitEthernet0/1.20
+   description POS_SYS_GATEWAY
+   encapsulation dot1Q 20
+   ip address 192.168.20.1 255.255.255.0
+   no ip proxy-arp
+   ip nat inside
+   ip access-group VLAN20_RESTRICTIONS in
+```
+</details>
+
 ### Perimeter Security & Access Control
 *   **WAN Edge Anti-Spoofing:** An inbound Access Control List (`WAN_IN`) is applied to the internet-facing interface. This ACL drops unsolicited ICMP echo requests to maintain a stealth profile and explicitly blocks RFC-1918 private IP addresses from entering the WAN edge, mitigating external IP spoofing attacks.
 *   **Secure Infrastructure Management:** Remote administrative access (SSHv2) to the router is strictly controlled via Virtual Terminal (VTY) access classes. Management traffic is isolated and only permitted when originating from the dedicated Network Management VLAN. Console access is protected by local authentication to prevent unauthorized physical tampering.
@@ -94,6 +116,22 @@ https://github.com/user-attachments/assets/925b0f85-d2b3-4fb4-9c66-0813b104ba5a
 Port Address Translation (PAT / NAT Overload) is configured to map internal private IP addresses to a single public IP provided by the ISP. A standard ACL explicitly dictates which hosts are permitted to be translated:
 *   Standard employee and guest devices are permitted outbound translation.
 *   Specific IoT and management devices (like the office printer) are explicitly denied NAT translation, enforcing a strict local-only air-gap.
+
+<details>
+  <summary>🔍 View NAT & Air-Gap ACL Config</summary>
+
+  ```cisco
+  ip nat inside source list 1 interface GigabitEthernet0/0 overload
+  
+  ! Denying specific IoT and Management devices from NAT translation
+  access-list 1 deny host 192.168.10.2
+  access-list 1 deny host 192.168.10.20
+  access-list 1 deny host 192.168.10.22
+  access-list 1 permit 192.168.10.0 0.0.0.255
+  access-list 1 permit 192.168.20.0 0.0.0.255
+  access-list 1 permit 192.168.30.0 0.0.0.255
+```
+</details>
 
 ### ⚠️ Packet Tracer Limitations (Routing & Edge)
 *   **Stateless vs. Stateful Inspection:** In a real-world enterprise, the POS system requires secure outbound internet access to communicate with payment processors, which is best handled by a Next-Generation Firewall (NGFW) performing stateful inspection and URL filtering. Because Packet Tracer relies on basic, stateless ACLs, accurately simulating this granular, secure outbound access without exposing the POS network is highly limited, requiring a total air-gap in this simulation.
