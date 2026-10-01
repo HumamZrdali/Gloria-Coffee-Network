@@ -37,9 +37,8 @@ Physical switch ports are strictly controlled based on their intended function:
 *   **Wireless Access Point Ports:** Switch ports connecting to Guest Wi-Fi APs accommodate transient devices by utilizing a maximum MAC address limit combined with a `restrict` violation mode and a 10-minute aging timer. This prevents MAC flooding attacks while gracefully releasing inactive guest sessions.
 *   **Unused Ports:** All inactive ports are administratively shut down and placed into a "blackhole" VLAN (VLAN 999) to prevent unauthorized network access via physical tampering.
 *   **Broadcast Control:** Storm control is configured to limit broadcast traffic to 5-10% of interface bandwidth, mitigating potential broadcast storms.
-
 <details>
-<summary>🔍 View AP Port Security Config (Fa0/10)
+<summary>🔍 View AP Port Security Config (Fa0/10)</summary>
 
 ```cisco
 interface FastEthernet0/10
@@ -55,7 +54,8 @@ interface FastEthernet0/10
  storm-control broadcast level 10
  ip access-group 101 in
  spanning-tree bpduguard enable
-</summary>
+</details>
+```
 
 ### Layer 2 Hardening
 *   **DHCP Snooping & Dynamic ARP Inspection (DAI):** Configured across all active VLANs to establish a trusted DHCP binding database. This prevents rogue DHCP server deployments and mitigates ARP poisoning/Man-in-the-Middle (MitM) attacks.
@@ -94,20 +94,6 @@ https://github.com/user-attachments/assets/925b0f85-d2b3-4fb4-9c66-0813b104ba5a
 Port Address Translation (PAT / NAT Overload) is configured to map internal private IP addresses to a single public IP provided by the ISP. A standard ACL explicitly dictates which hosts are permitted to be translated:
 *   Standard employee and guest devices are permitted outbound translation.
 *   Specific IoT and management devices (like the office printer) are explicitly denied NAT translation, enforcing a strict local-only air-gap.
-
-<details>
-  <summary>🔍 View NAT & Air-Gap ACL Config</summary>
-  ```cisco
-  ip nat inside source list 1 interface GigabitEthernet0/0 overload
-  
-  ! Denying specific IoT and Management devices from NAT translation
-  access-list 1 deny host 192.168.10.2
-  access-list 1 deny host 192.168.10.20
-  access-list 1 deny host 192.168.10.22
-  access-list 1 permit 192.168.10.0 0.0.0.255
-  access-list 1 permit 192.168.20.0 0.0.0.255
-  access-list 1 permit 192.168.30.0 0.0.0.255
-</details>
 
 ### ⚠️ Packet Tracer Limitations (Routing & Edge)
 *   **Stateless vs. Stateful Inspection:** In a real-world enterprise, the POS system requires secure outbound internet access to communicate with payment processors, which is best handled by a Next-Generation Firewall (NGFW) performing stateful inspection and URL filtering. Because Packet Tracer relies on basic, stateless ACLs, accurately simulating this granular, secure outbound access without exposing the POS network is highly limited, requiring a total air-gap in this simulation.
