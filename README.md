@@ -53,6 +53,7 @@ interface FastEthernet0/10
  spanning-tree portfast
  storm-control broadcast level 10
  ip access-group 101 in
+ no cdp enable
  spanning-tree bpduguard enable
 ```
 </details>
@@ -86,21 +87,41 @@ The edge router serves as the gateway for all internal networks, handling inter-
   <summary>🔍 View Inter-VLAN Routing Config (GigabitEthernet0/1)</summary>
 
   ```cisco
-  interface GigabitEthernet0/1.10
-   description MANAGEMENT_OFFICE_GATEWAY
-   encapsulation dot1Q 10
-   ip address 192.168.10.1 255.255.255.0
-   no ip proxy-arp
-   ip nat inside
-   ip access-group VLAN10_RESTRICTIONS in
-  
-  interface GigabitEthernet0/1.20
-   description POS_SYS_GATEWAY
-   encapsulation dot1Q 20
-   ip address 192.168.20.1 255.255.255.0
-   no ip proxy-arp
-   ip nat inside
-   ip access-group VLAN20_RESTRICTIONS in
+interface GigabitEthernet0/1
+ description TO_GloriaCoffee_SW
+ no ip address
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/1.10
+ description MANAGEMENT_OFFICE_GATEWAY
+ encapsulation dot1Q 10
+ ip address 192.168.10.1 255.255.255.0
+ no ip proxy-arp
+ ip nat inside
+ ip access-group VLAN10_RESTRICTIONS in
+!
+interface GigabitEthernet0/1.20
+ description POS_SYS_GATEWAY
+ encapsulation dot1Q 20
+ ip address 192.168.20.1 255.255.255.0
+ no ip proxy-arp
+ ip nat inside
+ ip access-group VLAN20_RESTRICTIONS in
+!
+interface GigabitEthernet0/1.30
+ description GUEST_WIFI_GATEWAY
+ encapsulation dot1Q 30
+ ip address 192.168.30.1 255.255.255.0
+ no ip proxy-arp
+ ip nat inside
+ ip access-group VLAN30_RESTRICTIONS in
+!
+interface GigabitEthernet0/1.99
+ description NETWORK_MANAGEMENT_GATEWAY
+ encapsulation dot1Q 99
+ ip address 192.168.99.1 255.255.255.0
+ no ip proxy-arp
 ```
 </details>
 
@@ -121,15 +142,21 @@ Port Address Translation (PAT / NAT Overload) is configured to map internal priv
   <summary>🔍 View NAT & Air-Gap ACL Config</summary>
 
   ```cisco
-  ip nat inside source list 1 interface GigabitEthernet0/0 overload
-  
-  ! Denying specific IoT and Management devices from NAT translation
-  access-list 1 deny host 192.168.10.2
-  access-list 1 deny host 192.168.10.20
-  access-list 1 deny host 192.168.10.22
-  access-list 1 permit 192.168.10.0 0.0.0.255
-  access-list 1 permit 192.168.20.0 0.0.0.255
-  access-list 1 permit 192.168.30.0 0.0.0.255
+ip nat inside source list 1 interface GigabitEthernet0/0 overload
+
+! Denying specific IoT and Management devices from NAT translation
+access-list 1 deny host 192.168.10.2
+access-list 1 deny host 192.168.10.3
+access-list 1 deny host 192.168.10.4
+access-list 1 deny host 192.168.10.5
+access-list 1 deny host 192.168.10.6
+access-list 1 deny host 192.168.10.7
+access-list 1 deny host 192.168.10.20
+access-list 1 deny host 192.168.10.22
+access-list 1 permit 192.168.10.0 0.0.0.255
+access-list 1 deny host 192.168.20.20
+access-list 1 permit 192.168.20.0 0.0.0.255
+access-list 1 permit 192.168.30.0 0.0.0.255
 ```
 </details>
 
@@ -168,9 +195,9 @@ To explore the configurations directly via the CLI in Cisco Packet Tracer, use t
 
 | Device | Access Method | Username | Password | Enable Secret |
 | :--- | :--- | :--- | :--- | :--- |
-| **GloriaCoffee_R1** | Console (CLI Tab) | `r1_console` | `ConsolePass2026!` | `Cisco123` |
+| **GloriaCoffee_R1** | Console (CLI Tab) | `r1_Console` | `ConsolePass2026!` | `Cisco123` |
 | **GloriaCoffee_R1** | SSH (via VLAN 99) | `netadmin` | `StrongPass2026!` | `Cisco123` |
-| **GloriaCoffee_SW** | Console (CLI Tab) | `sw_console` | `ConsolePass2026!` | `Cisco123` |
+| **GloriaCoffee_SW** | Console (CLI Tab) | `Sw_Console` | `ConsolePass2026!` | `Cisco123` |
 | **GloriaCoffee_SW** | SSH | `admin` | `Cisco123` | `Cisco123` |
 
 ### ⚠️ Packet Tracer Limitations (Authentication)
