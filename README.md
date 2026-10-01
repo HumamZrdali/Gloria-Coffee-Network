@@ -190,7 +190,7 @@ The ISP router and internet server emulate external wide-area network (WAN) serv
 *   **HTTP/DNS Simulation:** The server runs local web services hosting lightweight mock pages (such as `google.html` and `youtube.html`). When guest or management clients issue web requests or test DNS lookups, the server delivers an in-browser response to verify end-to-end WAN path validation without needing external connectivity.
 
 https://github.com/user-attachments/assets/7fb63aeb-25fb-45a4-9f81-477cad7d6848
-<br>
+
 
 ### ⚠️ Packet Tracer Limitations (ISP & WAN Services)
 *   **Simplified Internet Architecture:** In production, enterprise internet connectivity involves public Autonomous System Numbers (ASNs), Border Gateway Protocol (BGP) peering, and Content Delivery Networks (CDNs). A single mock server and static default route are used here to represent the broader internet within Packet Tracer's simulation limits.
