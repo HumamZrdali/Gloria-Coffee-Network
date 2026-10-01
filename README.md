@@ -38,6 +38,22 @@ Physical switch ports are strictly controlled based on their intended function:
 *   **Unused Ports:** All inactive ports are administratively shut down and placed into a "blackhole" VLAN (VLAN 999) to prevent unauthorized network access via physical tampering.
 *   **Broadcast Control:** Storm control is configured to limit broadcast traffic to 5-10% of interface bandwidth, mitigating potential broadcast storms.
 
+**Port Security Configuration (Fa0/10):**
+``cisco
+interface FastEthernet0/10
+ description STAFF_WIFI_AP1
+ ip dhcp snooping limit rate 30
+ switchport access vlan 10
+ switchport mode access
+ switchport port-security
+ switchport port-security maximum 20
+ switchport port-security violation restrict 
+ switchport port-security aging time 10
+ spanning-tree portfast
+ storm-control broadcast level 10
+ ip access-group 101 in
+ spanning-tree bpduguard enable
+
 ### Layer 2 Hardening
 *   **DHCP Snooping & Dynamic ARP Inspection (DAI):** Configured across all active VLANs to establish a trusted DHCP binding database. This prevents rogue DHCP server deployments and mitigates ARP poisoning/Man-in-the-Middle (MitM) attacks.
 *   **Spanning Tree Protocol (PVST):** Edge ports are configured with `portfast` for immediate forwarding and `bpduguard` to instantly disable the port if unauthorized switches are connected, preventing bridging loops.
