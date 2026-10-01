@@ -54,7 +54,6 @@ interface FastEthernet0/10
  storm-control broadcast level 10
  ip access-group 101 in
  spanning-tree bpduguard enable
-</details>
 ```
 
 ### Layer 2 Hardening
