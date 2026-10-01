@@ -94,7 +94,7 @@ Port Address Translation (PAT / NAT Overload) is configured to map internal priv
 
 <details>
   <summary>🔍 View NAT & Air-Gap ACL Config</summary>
-  cisco
+  ```cisco
   ip nat inside source list 1 interface GigabitEthernet0/0 overload
   
   ! Denying specific IoT and Management devices from NAT translation
@@ -105,6 +105,7 @@ Port Address Translation (PAT / NAT Overload) is configured to map internal priv
   access-list 1 permit 192.168.20.0 0.0.0.255
   access-list 1 permit 192.168.30.0 0.0.0.255
 </details>
+
 ### ⚠️ Packet Tracer Limitations (Routing & Edge)
 *   **Stateless vs. Stateful Inspection:** In a real-world enterprise, the POS system requires secure outbound internet access to communicate with payment processors, which is best handled by a Next-Generation Firewall (NGFW) performing stateful inspection and URL filtering. Because Packet Tracer relies on basic, stateless ACLs, accurately simulating this granular, secure outbound access without exposing the POS network is highly limited, requiring a total air-gap in this simulation.
 *   **VPN and Cryptography:** A standard enterprise deployment would utilize an IPsec or SSL VPN for secure remote management from outside the site. Packet Tracer's implementation of cryptography lacks support for modern, secure cipher suites, so remote VPN access was omitted in favor of local management isolation.
