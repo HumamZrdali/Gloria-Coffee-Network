@@ -10,6 +10,7 @@ This repository contains a Cisco Packet Tracer project demonstrating a highly se
 
 ![Network Topology](images/Topology.png)
 
+
 ## VLAN Architecture & Business Logic
 
 The network is segmented into four distinct VLANs (plus a blackhole VLAN) to ensure strict security, compliance, and traffic isolation across the business:
@@ -24,12 +25,14 @@ The network is segmented into four distinct VLANs (plus a blackhole VLAN) to ens
 
 ---
 
+
 https://github.com/user-attachments/assets/5a86f648-b328-4a40-bc3d-7b65aa5a7a83
 
 
 ## Core Switch & L2 Security (GloriaCoffee_SW)
 
 The core switch acts as the primary enforcement point for internal network security, utilizing several Layer 2 hardening techniques to prevent unauthorized access, spoofing, and internal lateral movement.
+
 
 ### Port Security & Access Control
 Physical switch ports are strictly controlled based on their intended function:
@@ -58,14 +61,17 @@ interface FastEthernet0/10
 ```
 </details>
 
+
 ### Layer 2 Hardening
 *   **DHCP Snooping & Dynamic ARP Inspection (DAI):** Configured across all active VLANs to establish a trusted DHCP binding database. This prevents rogue DHCP server deployments and mitigates ARP poisoning/Man-in-the-Middle (MitM) attacks.
 *   **Spanning Tree Protocol (PVST):** Edge ports are configured with `portfast` for immediate forwarding and `bpduguard` to instantly disable the port if unauthorized switches are connected, preventing bridging loops.
+
 
 ### VLAN-Specific Logic
 *   **VLAN 10 (Management Office & Physical Security):** To ensure strict internal host isolation, an inbound Access Control List (ACL 101) restricts lateral communication. The network logic dictates that the Manager PC may only communicate with the office printer, while the Video Management System (VMS) server is strictly limited to communicating with the IP security cameras. Additionally, a strict zero-trust model is applied to IoT devices: the printer, cameras, and VMS host are intentionally air-gapped from the internet to eliminate vectors for external exploitation.
 *   **VLAN 20 (Point of Sale Systems):** Designed with Payment Card Industry Data Security Standard (PCI-DSS) compliance in mind, the POS terminals and receipt printers are heavily isolated from both the management and guest networks to secure sensitive transactional data.
 *   **VLAN 30 (Guest Wi-Fi Segregation):** Guest traffic is kept entirely separate from corporate infrastructure. To enforce client isolation at the switch level, the switch ports connecting the Access Points are configured as `protected` ports, preventing direct AP-to-AP communication.
+
 
 ### ⚠️ Packet Tracer Limitations (Switching & L2)
 *   **VLAN Access Control Lists (VACLs) & Static IPs:** In a production environment, granular host isolation (such as restricting the VMS exclusively to cameras) and complete DAI enforcement would utilize VACLs and MAC-based filtering. Because Packet Tracer lacks VACL support and single-address DHCP reservations, this lab enforces internal isolation using standard IP ACLs tied to statically assigned IP addresses.
@@ -78,6 +84,7 @@ interface FastEthernet0/10
 ## Edge Router & Inter-VLAN Routing (GloriaCoffee_R1)
 
 The edge router serves as the gateway for all internal networks, handling inter-VLAN routing, dynamic IP allocation, NAT, and perimeter defense against external threats.
+
 
 ### Routing & IP Address Management (IPAM)
 *   **Router-on-a-Stick (ROAS):** Inter-VLAN routing is facilitated through a single physical Gigabit interface utilizing 802.1Q subinterfaces. This allows isolated broadcast domains to route traffic logically through a central chokepoint.
@@ -130,6 +137,7 @@ interface GigabitEthernet0/1.99
 *   **Secure Infrastructure Management:** Remote administrative access (SSHv2) to the router is strictly controlled via Virtual Terminal (VTY) access classes. Management traffic is isolated and only permitted when originating from the dedicated Network Management VLAN. Console access is protected by local authentication to prevent unauthorized physical tampering.
 *   **Inter-VLAN ACLs:** Extended ACLs are applied inbound on the subinterfaces to prevent lateral movement. For example, the Guest and POS networks are strictly denied from routing into the Management office or each other.
 
+
 https://github.com/user-attachments/assets/925b0f85-d2b3-4fb4-9c66-0813b104ba5a
 
 
@@ -160,6 +168,7 @@ access-list 1 permit 192.168.30.0 0.0.0.255
 ```
 </details>
 
+
 ### ⚠️ Packet Tracer Limitations (Routing & Edge)
 *   **Stateless vs. Stateful Inspection:** In a real-world enterprise, the POS system requires secure outbound internet access to communicate with payment processors, which is best handled by a Next-Generation Firewall (NGFW) performing stateful inspection and URL filtering. Because Packet Tracer relies on basic, stateless ACLs, accurately simulating this granular, secure outbound access without exposing the POS network is highly limited, requiring a total air-gap in this simulation.
 *   **VPN and Cryptography:** A standard enterprise deployment would utilize an IPsec or SSL VPN for secure remote management from outside the site. Packet Tracer's implementation of cryptography lacks support for modern, secure cipher suites, so remote VPN access was omitted in favor of local management isolation.
@@ -170,9 +179,11 @@ access-list 1 permit 192.168.30.0 0.0.0.255
 
 The ISP router and internet server emulate external wide-area network (WAN) services, providing upstream routing, time synchronization, and basic web access for client verification.
 
+
 ### Upstream Routing & NAT Realism
 *   **Public IP Addressing:** The WAN link between R1 and the ISP utilizes a `/30` public subnet (`209.165.200.224/30`).
 *   **Realistic Routing Boundary:** Reflecting real-world ISP operations, the ISP router possesses no routing table entries for internal RFC-1918 subnets. Upstream routing relies entirely on R1 translating internal client addresses to its publicly routable IP before forwarding packets over the transit link.
+
 
 ### Public Services & Testing Infrastructure
 *   **Network Time Protocol (NTP):** The ISP router acts as an authoritative stratum-2 NTP master. R1 synchronizes its clock directly with the ISP, and the core switch in turn synchronizes with R1, ensuring consistent log timestamping across the enterprise.
@@ -199,6 +210,7 @@ To explore the configurations directly via the CLI in Cisco Packet Tracer, use t
 | **GloriaCoffee_R1** | SSH (via VLAN 99) | `netadmin` | `StrongPass2026!` | `Cisco123` |
 | **GloriaCoffee_SW** | Console (CLI Tab) | `Sw_Console` | `ConsolePass2026!` | `Cisco123` |
 | **GloriaCoffee_SW** | SSH | `admin` | `Cisco123` | `Cisco123` |
+
 
 ### ⚠️ Packet Tracer Limitations (Authentication)
 * **Interchangeable Local Accounts:** In this Packet Tracer simulation, the `login local` command allows any user in the local database to log in via either the Console or SSH (VTY lines). In a real-world enterprise deployment using AAA (TACACS+/RADIUS), console administration and remote SSH administration are strictly segregated. An account provisioned specifically for SSH would not be authorized for physical console access, and vice versa.
