@@ -24,8 +24,8 @@ The network is segmented into four distinct VLANs (plus a blackhole VLAN) to ens
 
 ---
 
-<video src="images/broadcast.mp4" controls="controls" width="100%">
-</video>
+https://github.com/user-attachments/assets/5a86f648-b328-4a40-bc3d-7b65aa5a7a83
+
 
 ## 🖧 Core Switch & L2 Security (GloriaCoffee_SW)
 
@@ -107,8 +107,9 @@ The edge router serves as the gateway for all internal networks, handling inter-
 *   **Secure Infrastructure Management:** Remote administrative access (SSHv2) to the router is strictly controlled via Virtual Terminal (VTY) access classes. Management traffic is isolated and only permitted when originating from the dedicated Network Management VLAN. Console access is protected by local authentication to prevent unauthorized physical tampering.
 *   **Inter-VLAN ACLs:** Extended ACLs are applied inbound on the subinterfaces to prevent lateral movement. For example, the Guest and POS networks are strictly denied from routing into the Management office or each other.
 
-<video src="images/acl_deny.mp4" controls="controls" width="100%">
-</video>
+
+https://github.com/user-attachments/assets/925b0f85-d2b3-4fb4-9c66-0813b104ba5a
+
 
 ### Network Address Translation (NAT)
 Port Address Translation (PAT / NAT Overload) is configured to map internal private IP addresses to a single public IP provided by the ISP. A standard ACL explicitly dictates which hosts are permitted to be translated:
@@ -147,8 +148,9 @@ The ISP router and internet server emulate external wide-area network (WAN) serv
 *   **Simulated Internet Server:** Configured with the well-known public address `8.8.8.8` to simulate external internet hosting. 
 *   **HTTP/DNS Simulation:** The server runs local web services hosting lightweight mock pages (such as `google.html` and `youtube.html`). When guest or management clients issue web requests or test DNS lookups, the server delivers an in-browser response to verify end-to-end WAN path validation without needing external connectivity.
 
-<video src="images/web_test.mp4" controls="controls" width="100%">
-</video>
+
+https://github.com/user-attachments/assets/7fb63aeb-25fb-45a4-9f81-477cad7d6848
+
 
 ### ⚠️ Packet Tracer Limitations (ISP & WAN Services)
 *   **Simplified Internet Architecture:** In production, enterprise internet connectivity involves public Autonomous System Numbers (ASNs), Border Gateway Protocol (BGP) peering, and Content Delivery Networks (CDNs). A single mock server and static default route are used here to represent the broader internet within Packet Tracer's simulation limits.
