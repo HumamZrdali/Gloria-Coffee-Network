@@ -9,7 +9,7 @@ This repository contains a Cisco Packet Tracer project demonstrating a highly se
 ## Network Topology
 
 ![Network Topology](images/Topology.png)
-
+<br>
 
 ## VLAN Architecture & Business Logic
 
