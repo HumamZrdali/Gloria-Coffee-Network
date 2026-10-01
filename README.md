@@ -55,6 +55,7 @@ interface FastEthernet0/10
  ip access-group 101 in
  spanning-tree bpduguard enable
 ```
+</details>
 
 ### Layer 2 Hardening
 *   **DHCP Snooping & Dynamic ARP Inspection (DAI):** Configured across all active VLANs to establish a trusted DHCP binding database. This prevents rogue DHCP server deployments and mitigates ARP poisoning/Man-in-the-Middle (MitM) attacks.
