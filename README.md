@@ -65,7 +65,6 @@ interface FastEthernet0/10
 ### Layer 2 Hardening
 *   **DHCP Snooping & Dynamic ARP Inspection (DAI):** Configured across all active VLANs to establish a trusted DHCP binding database. This prevents rogue DHCP server deployments and mitigates ARP poisoning/Man-in-the-Middle (MitM) attacks.
 *   **Spanning Tree Protocol (PVST):** Edge ports are configured with `portfast` for immediate forwarding and `bpduguard` to instantly disable the port if unauthorized switches are connected, preventing bridging loops.
-<br>
 
 ### VLAN-Specific Logic
 *   **VLAN 10 (Management Office & Physical Security):** To ensure strict internal host isolation, an inbound Access Control List (ACL 101) restricts lateral communication. The network logic dictates that the Manager PC may only communicate with the office printer, while the Video Management System (VMS) server is strictly limited to communicating with the IP security cameras. Additionally, a strict zero-trust model is applied to IoT devices: the printer, cameras, and VMS host are intentionally air-gapped from the internet to eliminate vectors for external exploitation.
@@ -131,6 +130,7 @@ interface GigabitEthernet0/1.99
  no ip proxy-arp
 ```
 </details>
+<br>
 
 ### Perimeter Security & Access Control
 *   **WAN Edge Anti-Spoofing:** An inbound Access Control List (`WAN_IN`) is applied to the internet-facing interface. This ACL drops unsolicited ICMP echo requests to maintain a stealth profile and explicitly blocks RFC-1918 private IP addresses from entering the WAN edge, mitigating external IP spoofing attacks.
@@ -166,7 +166,7 @@ access-list 1 permit 192.168.20.0 0.0.0.255
 access-list 1 permit 192.168.30.0 0.0.0.255
 ```
 </details>
-
+<br>
 
 ### ⚠️ Packet Tracer Limitations (Routing & Edge)
 *   **Stateless vs. Stateful Inspection:** In a real-world enterprise, the POS system requires secure outbound internet access to communicate with payment processors, which is best handled by a Next-Generation Firewall (NGFW) performing stateful inspection and URL filtering. Because Packet Tracer relies on basic, stateless ACLs, accurately simulating this granular, secure outbound access without exposing the POS network is highly limited, requiring a total air-gap in this simulation.
@@ -188,9 +188,9 @@ The ISP router and internet server emulate external wide-area network (WAN) serv
 *   **Network Time Protocol (NTP):** The ISP router acts as an authoritative stratum-2 NTP master. R1 synchronizes its clock directly with the ISP, and the core switch in turn synchronizes with R1, ensuring consistent log timestamping across the enterprise.
 *   **Simulated Internet Server:** Configured with the well-known public address `8.8.8.8` to simulate external internet hosting. 
 *   **HTTP/DNS Simulation:** The server runs local web services hosting lightweight mock pages (such as `google.html` and `youtube.html`). When guest or management clients issue web requests or test DNS lookups, the server delivers an in-browser response to verify end-to-end WAN path validation without needing external connectivity.
-<br>
 
 https://github.com/user-attachments/assets/7fb63aeb-25fb-45a4-9f81-477cad7d6848
+<br>
 
 ### ⚠️ Packet Tracer Limitations (ISP & WAN Services)
 *   **Simplified Internet Architecture:** In production, enterprise internet connectivity involves public Autonomous System Numbers (ASNs), Border Gateway Protocol (BGP) peering, and Content Delivery Networks (CDNs). A single mock server and static default route are used here to represent the broader internet within Packet Tracer's simulation limits.
@@ -208,7 +208,6 @@ To explore the configurations directly via the CLI in Cisco Packet Tracer, use t
 | **GloriaCoffee_R1** | SSH (via VLAN 99) | `netadmin` | `StrongPass2026!` | `Cisco123` |
 | **GloriaCoffee_SW** | Console (CLI Tab) | `Sw_Console` | `ConsolePass2026!` | `Cisco123` |
 | **GloriaCoffee_SW** | SSH | `admin` | `Cisco123` | `Cisco123` |
-<br>
 
 ### ⚠️ Packet Tracer Limitations (Authentication)
 * **Interchangeable Local Accounts:** In this Packet Tracer simulation, the `login local` command allows any user in the local database to log in via either the Console or SSH (VTY lines). In a real-world enterprise deployment using AAA (TACACS+/RADIUS), console administration and remote SSH administration are strictly segregated. An account provisioned specifically for SSH would not be authorized for physical console access, and vice versa.
