@@ -35,24 +35,6 @@ The core switch acts as the primary enforcement point for internal network secur
 Physical switch ports are strictly controlled based on their intended function:
 *   **Wired Corporate Ports:** Ports servicing the management office and POS systems utilize `mac-address sticky` to permanently lock physical wall jacks to specific, authorized corporate devices.
 *   **Wireless Access Point Ports:** Switch ports connecting to Guest Wi-Fi APs accommodate transient devices by utilizing a maximum MAC address limit combined with a `restrict` violation mode and a 10-minute aging timer. This prevents MAC flooding attacks while gracefully releasing inactive guest sessions.
-
-<details>
-  <summary>🔍 View AP Port Security Config (Fa0/10)</summary>
-  ```cisco
-  interface FastEthernet0/10
-   description STAFF_WIFI_AP1
-   ip dhcp snooping limit rate 30
-   switchport access vlan 10
-   switchport mode access
-   switchport port-security
-   switchport port-security maximum 20
-   switchport port-security violation restrict 
-   switchport port-security aging time 10
-   spanning-tree portfast
-   storm-control broadcast level 10
-   ip access-group 101 in
-   spanning-tree bpduguard enable
-
 *   **Unused Ports:** All inactive ports are administratively shut down and placed into a "blackhole" VLAN (VLAN 999) to prevent unauthorized network access via physical tampering.
 *   **Broadcast Control:** Storm control is configured to limit broadcast traffic to 5-10% of interface bandwidth, mitigating potential broadcast storms.
 
@@ -75,38 +57,16 @@ Physical switch ports are strictly controlled based on their intended function:
 
 ## 🚦 Edge Router & Inter-VLAN Routing (GloriaCoffee_R1)
 
-
 The edge router serves as the gateway for all internal networks, handling inter-VLAN routing, dynamic IP allocation, NAT, and perimeter defense against external threats.
 
 ### Routing & IP Address Management (IPAM)
 *   **Router-on-a-Stick (ROAS):** Inter-VLAN routing is facilitated through a single physical Gigabit interface utilizing 802.1Q subinterfaces. This allows isolated broadcast domains to route traffic logically through a central chokepoint.
-
-<details>
-  <summary>🔍 View Inter-VLAN Routing Config (GigabitEthernet0/1)</summary>
-  ```cisco
-  interface GigabitEthernet0/1.10
-   description MANAGEMENT_OFFICE_GATEWAY
-   encapsulation dot1Q 10
-   ip address 192.168.10.1 255.255.255.0
-   no ip proxy-arp
-   ip nat inside
-   ip access-group VLAN10_RESTRICTIONS in
-  
-  interface GigabitEthernet0/1.20
-   description POS_SYS_GATEWAY
-   encapsulation dot1Q 20
-   ip address 192.168.20.1 255.255.255.0
-   no ip proxy-arp
-   ip nat inside
-   ip access-group VLAN20_RESTRICTIONS in
-
 *   **DHCP Services & Expandability:** The router acts as the centralized DHCP server for the Management, POS, and Guest networks. To accommodate future network expansion and ensure static infrastructure (such as servers, cameras, and printers) have predictable addresses, the first 20-22 IP addresses of each subnet are explicitly excluded from the DHCP pools.
 
 ### Perimeter Security & Access Control
 *   **WAN Edge Anti-Spoofing:** An inbound Access Control List (`WAN_IN`) is applied to the internet-facing interface. This ACL drops unsolicited ICMP echo requests to maintain a stealth profile and explicitly blocks RFC-1918 private IP addresses from entering the WAN edge, mitigating external IP spoofing attacks.
 *   **Secure Infrastructure Management:** Remote administrative access (SSHv2) to the router is strictly controlled via Virtual Terminal (VTY) access classes. Management traffic is isolated and only permitted when originating from the dedicated Network Management VLAN. Console access is protected by local authentication to prevent unauthorized physical tampering.
 *   **Inter-VLAN ACLs:** Extended ACLs are applied inbound on the subinterfaces to prevent lateral movement. For example, the Guest and POS networks are strictly denied from routing into the Management office or each other.
-
 
 https://github.com/user-attachments/assets/925b0f85-d2b3-4fb4-9c66-0813b104ba5a
 
