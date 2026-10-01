@@ -1,0 +1,434 @@
+Current configuration : 10735 bytes
+!
+version 12.2(37)SE1
+service timestamps log datetime msec
+service timestamps debug datetime msec
+service password-encryption
+!
+hostname GloriaCoffee_SW
+!
+!
+no profinet
+enable secret 5 $1$mERr$RldxcCZEZsTFTETUyRaA50
+!
+!
+!
+clock timezone TRT 3
+!
+!
+!
+!
+!
+!
+username admin privilege 15 secret 5 $1$mERr$RldxcCZEZsTFTETUyRaA50
+username sw_console privilege 15 secret 5 $1$mERr$mkboCuLwG9NJlCzY65saW/
+!
+!
+!
+!
+!
+!
+!
+!
+ip arp inspection vlan 10,20,30
+ip arp inspection validate src-mac dst-mac ip
+!
+ip dhcp snooping vlan 10,20,30
+no ip dhcp snooping information option
+ip dhcp snooping
+!
+ip ssh version 2
+no ip domain-lookup
+ip domain-name gloriacoffee.shop
+!
+!
+vtp mode transparent
+!
+spanning-tree mode pvst
+spanning-tree portfast bpduguard default
+!
+!
+!
+!
+!
+!
+vlan 10
+ name MANAGER_OFFICE
+!
+vlan 20
+ name POS_SYS
+!
+vlan 30
+ name GUEST_WIFI
+!
+vlan 99
+ name NETWORK_MANAGEMENT
+!
+vlan 999
+ name UNUSED_PORTS
+!
+interface FastEthernet0/1
+ description MANAGEMENT_OFFICE_DEVICES
+ ip dhcp snooping limit rate 15
+ switchport access vlan 10
+ switchport mode access
+ switchport port-security
+ switchport port-security mac-address sticky 
+ switchport port-security mac-address sticky 00E0.B029.2A6E
+ spanning-tree portfast
+ storm-control broadcast level 5
+ ip access-group 101 in
+ no cdp enable
+ spanning-tree bpduguard enable
+!
+interface FastEthernet0/2
+ description MANAGEMENT_OFFICE_DEVICES
+ ip dhcp snooping limit rate 15
+ switchport access vlan 10
+ switchport mode access
+ switchport port-security
+ switchport port-security mac-address sticky 
+ switchport port-security mac-address sticky 0090.0CEC.3813
+ spanning-tree portfast
+ storm-control broadcast level 5
+ ip access-group 101 in
+ no cdp enable
+ spanning-tree bpduguard enable
+!
+interface FastEthernet0/3
+ description MANAGEMENT_OFFICE_DEVICES
+ ip dhcp snooping limit rate 15
+ switchport access vlan 10
+ switchport mode access
+ switchport port-security
+ switchport port-security mac-address sticky 
+ switchport port-security mac-address sticky 0001.963A.07CD
+ spanning-tree portfast
+ storm-control broadcast level 5
+ ip access-group 101 in
+ no cdp enable
+ spanning-tree bpduguard enable
+!
+interface FastEthernet0/4
+ description MANAGEMENT_OFFICE_DEVICES
+ ip dhcp snooping limit rate 15
+ switchport access vlan 10
+ switchport mode access
+ switchport port-security
+ switchport port-security mac-address sticky 
+ switchport port-security mac-address sticky 0010.11BB.E110
+ spanning-tree portfast
+ storm-control broadcast level 5
+ ip access-group 101 in
+ no cdp enable
+ spanning-tree bpduguard enable
+!
+interface FastEthernet0/5
+ description MANAGEMENT_OFFICE_DEVICES
+ ip dhcp snooping limit rate 15
+ switchport access vlan 10
+ switchport mode access
+ switchport port-security
+ switchport port-security mac-address sticky 
+ switchport port-security mac-address sticky 0090.2BAE.4BA6
+ spanning-tree portfast
+ storm-control broadcast level 5
+ ip access-group 101 in
+ no cdp enable
+ spanning-tree bpduguard enable
+!
+interface FastEthernet0/6
+ description MANAGEMENT_OFFICE_DEVICES
+ ip dhcp snooping limit rate 15
+ switchport access vlan 10
+ switchport mode access
+ switchport port-security
+ switchport port-security mac-address sticky 
+ switchport port-security mac-address sticky 0006.2A2D.C43D
+ spanning-tree portfast
+ storm-control broadcast level 5
+ ip access-group 101 in
+ no cdp enable
+ spanning-tree bpduguard enable
+!
+interface FastEthernet0/7
+ description MANAGEMENT_OFFICE_DEVICES
+ ip dhcp snooping limit rate 15
+ switchport access vlan 10
+ switchport mode access
+ switchport port-security
+ switchport port-security mac-address sticky 
+ switchport port-security mac-address sticky 0001.C75D.5E10
+ spanning-tree portfast
+ storm-control broadcast level 5
+ ip access-group 101 in
+ no cdp enable
+ spanning-tree bpduguard enable
+!
+interface FastEthernet0/8
+ description MANAGEMENT_OFFICE_DEVICES
+ ip dhcp snooping limit rate 15
+ switchport access vlan 10
+ switchport mode access
+ switchport port-security
+ switchport port-security mac-address sticky 
+ switchport port-security mac-address sticky 0001.641E.C39A
+ spanning-tree portfast
+ storm-control broadcast level 5
+ ip access-group 101 in
+ no cdp enable
+ spanning-tree bpduguard enable
+!
+interface FastEthernet0/9
+ description VMS_SECURITY_SERVER
+ ip dhcp snooping limit rate 15
+ switchport access vlan 10
+ switchport mode access
+ switchport port-security
+ switchport port-security mac-address sticky 
+ switchport port-security mac-address sticky 0050.0F87.7316
+ spanning-tree portfast
+ storm-control broadcast level 5
+ ip access-group 101 in
+ no cdp enable
+ spanning-tree bpduguard enable
+!
+interface FastEthernet0/10
+ description STAFF_WIFI_AP1
+ ip dhcp snooping limit rate 30
+ switchport access vlan 10
+ switchport mode access
+ switchport port-security
+ switchport port-security maximum 20
+ switchport port-security violation restrict 
+ switchport port-security aging time 10
+ spanning-tree portfast
+ storm-control broadcast level 10
+ ip access-group 101 in
+ no cdp enable
+ spanning-tree bpduguard enable
+!
+interface FastEthernet0/11
+ description POS_SYS_DEVICES
+ ip dhcp snooping limit rate 15
+ switchport access vlan 20
+ switchport mode access
+ switchport port-security
+ switchport port-security mac-address sticky 
+ switchport port-security mac-address sticky 0009.7C65.2C03
+ spanning-tree portfast
+ storm-control broadcast level 5
+ no cdp enable
+ spanning-tree bpduguard enable
+!
+interface FastEthernet0/12
+ description POS_SYS_DEVICES
+ ip dhcp snooping limit rate 15
+ switchport access vlan 20
+ switchport mode access
+ switchport port-security
+ switchport port-security mac-address sticky 
+ switchport port-security mac-address sticky 0002.17CD.EAEA
+ spanning-tree portfast
+ storm-control broadcast level 5
+ no cdp enable
+ spanning-tree bpduguard enable
+!
+interface FastEthernet0/13
+ description UNUSED_PORT
+ switchport access vlan 999
+ switchport mode access
+ switchport nonegotiate
+ spanning-tree portfast
+ shutdown
+!
+interface FastEthernet0/14
+ description UNUSED_PORT
+ switchport access vlan 999
+ switchport mode access
+ switchport nonegotiate
+ spanning-tree portfast
+ shutdown
+!
+interface FastEthernet0/15
+ description UNUSED_PORT
+ switchport access vlan 999
+ switchport mode access
+ switchport nonegotiate
+ spanning-tree portfast
+ shutdown
+!
+interface FastEthernet0/16
+ description UNUSED_PORT
+ switchport access vlan 999
+ switchport mode access
+ switchport nonegotiate
+ spanning-tree portfast
+ shutdown
+!
+interface FastEthernet0/17
+ description UNUSED_PORT
+ switchport access vlan 999
+ switchport mode access
+ switchport nonegotiate
+ spanning-tree portfast
+ shutdown
+!
+interface FastEthernet0/18
+ description UNUSED_PORT
+ switchport access vlan 999
+ switchport mode access
+ switchport nonegotiate
+ spanning-tree portfast
+ shutdown
+!
+interface FastEthernet0/19
+ description UNUSED_PORT
+ switchport access vlan 999
+ switchport mode access
+ switchport nonegotiate
+ spanning-tree portfast
+ shutdown
+!
+interface FastEthernet0/20
+ description UNUSED_PORT
+ switchport access vlan 999
+ switchport mode access
+ switchport nonegotiate
+ spanning-tree portfast
+ shutdown
+!
+interface FastEthernet0/21
+ description GUEST_WIFI_AP2
+ ip dhcp snooping limit rate 30
+ switchport access vlan 30
+ switchport mode access
+ switchport port-security
+ switchport port-security maximum 50
+ switchport port-security violation restrict 
+ switchport port-security aging time 10
+ switchport protected
+ spanning-tree portfast
+ storm-control broadcast level 10
+ no cdp enable
+ spanning-tree bpduguard enable
+!
+interface FastEthernet0/22
+ description UNUSED_PORT
+ switchport access vlan 999
+ switchport mode access
+ switchport nonegotiate
+ shutdown
+!
+interface FastEthernet0/23
+ description UNUSED_PORT
+ switchport access vlan 999
+ switchport mode access
+ switchport nonegotiate
+ shutdown
+!
+interface FastEthernet0/24
+ description UNUSED_PORT
+ switchport access vlan 999
+ switchport mode access
+ switchport nonegotiate
+ shutdown
+!
+interface GigabitEthernet0/1
+ description TO_ROUTER
+ ip dhcp snooping trust
+ switchport trunk allowed vlan 10,20,30,99
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport nonegotiate
+ ip arp inspection trust
+!
+interface GigabitEthernet0/2
+ description GUEST_WIFI_AP1
+ ip dhcp snooping limit rate 30
+ switchport access vlan 30
+ switchport mode access
+ switchport port-security
+ switchport port-security maximum 50
+ switchport port-security violation restrict 
+ switchport port-security aging time 10
+ switchport protected
+ spanning-tree portfast
+ storm-control broadcast level 10
+ no cdp enable
+ spanning-tree bpduguard enable
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface Vlan99
+ description SWITCH_MANAGEMENT
+ mac-address 00d0.58c9.be01
+ ip address 192.168.99.2 255.255.255.0
+!
+ip default-gateway 192.168.99.1
+ip classless
+!
+ip flow-export version 9
+!
+!
+access-list 101 remark INNER_VLAN10_RESTRICTIONS
+access-list 101 permit udp any eq bootpc any eq bootps
+access-list 101 permit udp any eq bootps any eq bootpc
+access-list 101 permit ip 192.168.10.0 0.0.0.255 host 192.168.10.1
+access-list 101 permit ip host 192.168.10.21 host 192.168.10.20
+access-list 101 permit ip host 192.168.10.20 host 192.168.10.21
+access-list 101 permit ip host 192.168.10.22 host 192.168.10.2
+access-list 101 permit ip host 192.168.10.22 host 192.168.10.3
+access-list 101 permit ip host 192.168.10.22 host 192.168.10.4
+access-list 101 permit ip host 192.168.10.22 host 192.168.10.5
+access-list 101 permit ip host 192.168.10.22 host 192.168.10.6
+access-list 101 permit ip host 192.168.10.22 host 192.168.10.7
+access-list 101 permit ip host 192.168.10.2 host 192.168.10.22
+access-list 101 permit ip host 192.168.10.3 host 192.168.10.22
+access-list 101 permit ip host 192.168.10.4 host 192.168.10.22
+access-list 101 permit ip host 192.168.10.5 host 192.168.10.22
+access-list 101 permit ip host 192.168.10.6 host 192.168.10.22
+access-list 101 permit ip host 192.168.10.7 host 192.168.10.22
+access-list 101 deny ip host 192.168.10.2 host 8.8.8.8
+access-list 101 deny ip host 192.168.10.3 host 8.8.8.8
+access-list 101 deny ip host 192.168.10.4 host 8.8.8.8
+access-list 101 deny ip host 192.168.10.5 host 8.8.8.8
+access-list 101 deny ip host 192.168.10.6 host 8.8.8.8
+access-list 101 deny ip host 192.168.10.7 host 8.8.8.8
+access-list 101 deny ip host 192.168.10.20 host 8.8.8.8
+access-list 101 deny ip host 192.168.10.22 host 8.8.8.8
+access-list 101 permit ip 192.168.10.0 0.0.0.255 host 8.8.8.8
+!
+no cdp run
+!
+banner motd ^C
+UNAUTHORIZED ACCESS IS PROHIBITED.
+^C
+!
+!
+!
+!
+!
+line con 0
+ logging synchronous
+ login local
+!
+line aux 0
+!
+line vty 0 4
+ logging synchronous
+ login local
+ transport input ssh
+line vty 5 15
+ logging synchronous
+ login local
+ transport input ssh
+!
+!
+!
+ntp server 192.168.99.1
+ntp update-calendar
+!
+end

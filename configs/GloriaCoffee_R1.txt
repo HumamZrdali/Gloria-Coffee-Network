@@ -1,0 +1,204 @@
+Current configuration : 4505 bytes
+!
+version 15.1
+service timestamps log datetime msec
+service timestamps debug datetime msec
+service password-encryption
+!
+hostname GloriaCoffee_R1
+!
+!
+!
+enable secret 5 $1$mERr$RldxcCZEZsTFTETUyRaA50
+!
+!
+ip dhcp excluded-address 192.168.20.1 192.168.20.20
+ip dhcp excluded-address 192.168.30.1 192.168.30.20
+ip dhcp excluded-address 192.168.10.1 192.168.10.22
+!
+ip dhcp pool MANAGEMENT_OFFICE
+ network 192.168.10.0 255.255.255.0
+ default-router 192.168.10.1
+ dns-server 8.8.8.8
+ip dhcp pool POS
+ network 192.168.20.0 255.255.255.0
+ default-router 192.168.20.1
+ dns-server 8.8.8.8
+ip dhcp pool GUEST_WIFI
+ network 192.168.30.0 255.255.255.0
+ default-router 192.168.30.1
+ dns-server 8.8.8.8
+clock timezone TRT 3
+!
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+!
+!
+username netadmin privilege 15 secret 5 $1$mERr$UjFKkQThK3nM8Cn7cghg80
+username r1_console privilege 15 secret 5 $1$mERr$mkboCuLwG9NJlCzY65saW/
+!
+!
+license udi pid CISCO2911/K9 sn FTX1524C1MW-
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+ip ssh version 2
+no ip domain-lookup
+ip domain-name gloriacoffee.shop
+!
+!
+spanning-tree mode pvst
+!
+!
+!
+!
+!
+!
+interface GigabitEthernet0/0
+ description TO_ISP
+ ip address 209.165.200.225 255.255.255.252
+ no ip proxy-arp
+ ip nat outside
+ ip access-group WAN_IN in
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/1
+ description TO_GloriaCoffee_SW
+ no ip address
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/1.10
+ description MANAGEMENT_OFFICE_GATEWAY
+ encapsulation dot1Q 10
+ ip address 192.168.10.1 255.255.255.0
+ no ip proxy-arp
+ ip nat inside
+ ip access-group VLAN10_RESTRICTIONS in
+!
+interface GigabitEthernet0/1.20
+ description POS_SYS_GATEWAY
+ encapsulation dot1Q 20
+ ip address 192.168.20.1 255.255.255.0
+ no ip proxy-arp
+ ip nat inside
+ ip access-group VLAN20_RESTRICTIONS in
+!
+interface GigabitEthernet0/1.30
+ description GUEST_WIFI_GATEWAY
+ encapsulation dot1Q 30
+ ip address 192.168.30.1 255.255.255.0
+ no ip proxy-arp
+ ip nat inside
+ ip access-group VLAN30_RESTRICTIONS in
+!
+interface GigabitEthernet0/1.99
+ description NETWORK_MANAGEMENT_GATEWAY
+ encapsulation dot1Q 99
+ ip address 192.168.99.1 255.255.255.0
+ no ip proxy-arp
+!
+interface GigabitEthernet0/2
+ no ip address
+ duplex auto
+ speed auto
+ shutdown
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+ip nat inside source list 1 interface GigabitEthernet0/0 overload
+ip classless
+ip route 0.0.0.0 0.0.0.0 209.165.200.226 
+!
+ip flow-export version 9
+!
+!
+ip access-list extended VLAN20_RESTRICTIONS
+ permit udp any eq bootpc any eq bootps
+ deny ip 192.168.20.0 0.0.0.255 192.168.30.0 0.0.0.255
+ deny ip 192.168.20.0 0.0.0.255 192.168.10.0 0.0.0.255
+ deny ip 192.168.20.0 0.0.0.255 192.168.99.0 0.0.0.255
+ permit ip 192.168.20.0 0.0.0.255 any
+ip access-list extended VLAN30_RESTRICTIONS
+ permit udp any eq bootpc any eq bootps
+ deny ip 192.168.30.0 0.0.0.255 192.168.10.0 0.0.0.255
+ deny ip 192.168.30.0 0.0.0.255 192.168.20.0 0.0.0.255
+ deny ip 192.168.30.0 0.0.0.255 192.168.99.0 0.0.0.255
+ permit ip 192.168.30.0 0.0.0.255 any
+ip access-list extended VLAN10_RESTRICTIONS
+ permit udp any eq bootpc any eq bootps
+ deny ip 192.168.10.0 0.0.0.255 192.168.20.0 0.0.0.255
+ deny ip 192.168.10.0 0.0.0.255 192.168.30.0 0.0.0.255
+ deny ip 192.168.10.0 0.0.0.255 192.168.99.0 0.0.0.255
+ permit ip 192.168.10.0 0.0.0.255 any
+access-list 1 deny host 192.168.10.2
+access-list 1 deny host 192.168.10.3
+access-list 1 deny host 192.168.10.4
+access-list 1 deny host 192.168.10.5
+access-list 1 deny host 192.168.10.6
+access-list 1 deny host 192.168.10.7
+access-list 1 deny host 192.168.10.20
+access-list 1 deny host 192.168.10.22
+access-list 1 permit 192.168.10.0 0.0.0.255
+access-list 1 deny host 192.168.20.20
+access-list 1 permit 192.168.20.0 0.0.0.255
+access-list 1 permit 192.168.30.0 0.0.0.255
+ip access-list extended WAN_IN
+ deny icmp any host 209.165.200.225 echo
+ deny icmp any host 209.165.200.225 echo-reply
+ deny ip 10.0.0.0 0.255.255.255 any
+ deny ip 172.16.0.0 0.15.255.255 any
+ deny ip 192.168.0.0 0.0.255.255 any
+ deny ip 127.0.0.0 0.255.255.255 any
+ deny ip host 0.0.0.0 any
+ permit ip any any
+ip access-list standard SSH_MGMT
+ permit host 203.0.113.50
+ip access-list standard SW_SSH_MGMT
+ permit host 192.168.99.1
+!
+no cdp run
+!
+banner motd ^C
+UNAUTHORIZED ACCESS IS PROHIBITED.
+^C
+!
+!
+!
+!
+line con 0
+ logging synchronous
+ login local
+!
+line aux 0
+!
+line vty 0 4
+ access-class SW_SSH_MGMT in
+ exec-timeout 5 0
+ logging synchronous
+ login local
+ transport input ssh
+line vty 5 15
+ access-class SW_SSH_MGMT in
+ login
+!
+!
+ntp server 209.165.200.226
+ntp update-calendar
+!
+end
